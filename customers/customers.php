@@ -20,8 +20,7 @@
 		              <thead>
 		                <tr>
 		                  <th>Name</th>
-		                  <th>Email Address</th>
-		                  <th>Mobile Number</th>
+		                  <th>Email</th>
 		                  <th>Action</th>
 		                </tr>
 		              </thead>
@@ -29,18 +28,17 @@
 		              <?php 
 					   include 'database.php';
 					   $pdo = Database::connect();
-					   $sql = 'SELECT * FROM customers ORDER BY id DESC';
+					   $sql = 'SELECT * FROM customers ORDER BY cust_id DESC';
 	 				   foreach ($pdo->query($sql) as $row) {
 						   		echo '<tr>';
-							   	echo '<td>'. $row['name'] . '</td>';
-							   	echo '<td>'. $row['email'] . '</td>';
-							   	echo '<td>'. $row['mobile'] . '</td>';
-							   	echo '<td width=250>';
-							   	echo '<a class="btn" href="read.php?id='.$row['id'].'">Read</a>';
+							   	echo '<td>'. $row['cust_name'] . '</td>';
+							   	echo '<td>'. $row['cust_email'] . '</td>';
+							   	echo '<td wcust_idth=250>';
+							   	echo '<a class="btn" href="read.php?cust_id='.$row['cust_id'].'">Read</a>';
 							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-success" href="update.php?id='.$row['id'].'">Update</a>';
+							   	echo '<a class="btn btn-success" href="update.php?cust_id='.$row['cust_id'].'">Update</a>';
 							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id'].'">Delete</a>';
+							   	echo '<a class="btn btn-danger" href="delete.php?cust_id='.$row['cust_id'].'">Delete</a>';
 							   	echo '</td>';
 							   	echo '</tr>';
 					   }

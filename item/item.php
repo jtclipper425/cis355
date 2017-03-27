@@ -9,20 +9,19 @@
 <body>
     <div class="container">
     		<div class="row">
-    			<h3>Events</h3>
+    			<h3>Items</h3>
     		</div>
 			<div class="row">
 				<p>
-					<a href="events_create.php" class="btn btn-success">Create</a>
+					<a href="create.php" class="btn btn-success">Create</a>
 				</p>
 				
 				<table class="table table-striped table-bordered">
 		              <thead>
 		                <tr>
-		                  <th>Date</th>
-		                  <th>Time</th>
-		                  <th>Location</th>
-		                  <th>Description</th>
+		                  <th>Title</th>
+		                  <th>Type</th>
+						  <th>Quality</th>
 		                  <th>Action</th>
 		                </tr>
 		              </thead>
@@ -30,19 +29,18 @@
 		              <?php 
 					   include 'database.php';
 					   $pdo = Database::connect();
-					   $sql = 'SELECT * FROM events ORDER BY id DESC';
+					   $sql = 'SELECT * FROM item ORDER BY item_id DESC';
 	 				   foreach ($pdo->query($sql) as $row) {
 						   		echo '<tr>';
-							   	echo '<td>'. $row['event_date'] . '</td>';
-							   	echo '<td>'. $row['event_time'] . '</td>';
-							   	echo '<td>'. $row['event_location'] . '</td>';
-							   	echo '<td>'. $row['event_description'] . '</td>';								
-							   	echo '<td width=250>';
-							   	echo '<a class="btn" href="events_read.php?id='.$row['id'].'">Read</a>';
+							   	echo '<td>'. $row['item_title'] . '</td>';
+							   	echo '<td>'. $row['item_type'] . '</td>';
+								echo '<td>'. $row['item_quality'] . '</td>';
+							   	echo '<td witem_idth=250>';
+							   	echo '<a class="btn" href="read.php?item_id='.$row['item_id'].'">Read</a>';
 							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-success" href="events_update.php?id='.$row['id'].'">Update</a>';
+							   	echo '<a class="btn btn-success" href="update.php?item_id='.$row['item_id'].'">Update</a>';
 							   	echo '&nbsp;';
-							   	echo '<a class="btn btn-danger" href="events_delete.php?id='.$row['id'].'">Delete</a>';
+							   	echo '<a class="btn btn-danger" href="delete.php?item_id='.$row['item_id'].'">Delete</a>';
 							   	echo '</td>';
 							   	echo '</tr>';
 					   }
