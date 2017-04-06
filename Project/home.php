@@ -4,66 +4,73 @@
 ?>
 <html>
   <head>
-    <title>Jaelyn's Personal Media Library</title>
+	<title>Jaelyn's Personal Media Library</title>
   </head>
   <body>
+	<form action="index.php" method="post">
   	<div style="margin-left: 40">
 		<h1>Jaelyn's Personal Media Library</h1>
 	</div>
 	
 	<ul class="nav nav-tabs" style="margin-bottom: 25">
-		<li role="presentation"><a href="home.php"><h3>Home</h3></a></li>
+		<li role="presentation" class="active"><a href="home.php"><h3>Home</h3></a></li>
 		<li role="presentation"><a href="titles.php"><h3>DVD/Bluray</h3></a></li>
-		<li role="presentation" class="active"><a href="account.php"><h3>Account</h3></a></li>
+		<li role="presentation"><a href="account.php"><h3>Account</h3></a></li>
 		<li role="presentation"><a href="index.php"><h3>Sign In</h3></a></li>
 		<li role="presentation"><a href="logout.php"><h3>Sign Out</h3></a></li>
 	</ul>
 	
 	
 	<div class="panel panel-default" style="margin-left: 40; margin-right:40">
-		<div class="panel-heading">Checked Out</div>
+		<div class="panel-heading">Popular Titles</div>
 		 
 		<table class="table">
+			<tr>
+				<th>Title</th>
+				<th>Type</th> 
+				<th>Quality</th>
+			</tr>
 			<?php 
 			   include 'database.php';
 			   $pdo = Database::connect();
-			   $sql = "SELECT item.item_image, item.item_title, checkouts.due_date FROM checkouts JOIN item ON checkouts.item_id=item.item_id JOIN customers ON checkouts.cust_id=customers.cust_id WHERE customers.cust_id='$userid' AND checkouts.return_date IS NULL";
+			   $sql = 'SELECT * FROM item ORDER BY item_rental_count DESC LIMIT 5';
 			   foreach ($pdo->query($sql) as $row) {
 						echo '<tr>';
-						echo '<td><img src="'. $row['item_image'] . '"></td>';
 						echo '<td>'. $row['item_title'] . '</td>';
-						echo '<td> Due: '. date_format(date_create($row['due_date']), 'M d, Y') .'</td>';
+						echo '<td>'. $row['item_type'] . '</td>';
+						echo '<td>'. $row['item_quality'] . '</td>';
 						echo '</td>';
 						echo '</tr>';
 				}
-				?>
+			?>
 		</table>
 	</div>
-	
 	<div class="panel panel-default" style="margin-left: 40; margin-right:40">
-	<div class="panel-heading">Account Information</div>
+		<div class="panel-heading">Recent Checkouts</div>
 		<table class="table">
 			<tr>
 				<th>Name</th>
-				<th>Username</th>
-				<th>Email</th>
+				<th>Title</th>
+				<th>Checkout Date</th>
 			</tr>
-			<tr>
-			<?php 
-					$sql = "SELECT * FROM customers WHERE customers.cust_id='$userid'";
+		<?php 
+					$sql = 'SELECT checkouts.checkout_id, customers.cust_name, checkouts.checked_out_date, item.item_title FROM checkouts JOIN item ON checkouts.item_id=item.item_id JOIN customers ON checkouts.cust_id=customers.cust_id ORDER BY checkouts.checkout_id DESC LIMIT 5';
 					foreach ($pdo->query($sql) as $row) {
-						echo '<td>'. $row['cust_name'] .'</td>';
-						echo '<td>'. $row['cust_username'] .'</td>';
-						echo '<td>'. $row['cust_email'] .'</td>';
+						echo '<tr>';
+						echo '<td>'. $row['cust_name'] . '</td>';
+						echo '<td>'. $row['item_title'] . '</td>';
+						echo '<td>'. date_format(date_create($row['checked_out_date']), 'M d, Y') . '</td>';
+						echo '</td>';
+						echo '</tr>';
 					}
-					Database::disconnect();
+		   Database::disconnect();
 		?>
-			</tr>
 		</table>
 	</div>
 
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	</form>
   </body>
 </html>

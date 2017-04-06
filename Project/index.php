@@ -1,72 +1,73 @@
 <?php
-	session_start();
-	$userid = $_SESSION['userid'];
+session_start();
+//connect to database
+$db=mysqli_connect("localhost","jtclippe","587052","jtclippe");
+if(isset($_POST['login_btn']))
+{
+    $username=mysqli_real_escape_string($db, $_POST['username']);
+    $password=mysqli_real_escape_string($db, $_POST['password']);
+    //$password=md5($password); //Remember we hashed password before storing last time
+    $sql="SELECT * FROM customers WHERE cust_username='$username' AND cust_password='$password'";
+		
+    $result=mysqli_query($db,$sql);
+    if(mysqli_num_rows($result)==1)
+    {
+		$response = $result->fetch_assoc();
+        $_SESSION['message']="You are now Logged In";
+		$_SESSION['userid']=$response['cust_id'];
+        header("location:home.php");
+		exit();
+    }
+   else
+   {
+                $_SESSION['message']="Username and Password combiation incorrect";
+    }
+}
+else if (isset($_POST['register_btn']))
+{
+	header("location:register.php");
+}
 ?>
 <html>
   <head>
-	<title>Jaelyn's Personal Media Library</title>
+    <title>Jaelyn's Personal Media Library</title>
   </head>
   <body>
-	<form action="index.php" method="post">
   	<div style="margin-left: 40">
 		<h1>Jaelyn's Personal Media Library</h1>
 	</div>
 	
 	<ul class="nav nav-tabs" style="margin-bottom: 25">
-		<li role="presentation" class="active"><a href="index.html"><h3>Home</h3></a></li>
+		<li role="presentation"><a href="home.php"><h3>Home</h3></a></li>
 		<li role="presentation"><a href="titles.php"><h3>DVD/Bluray</h3></a></li>
 		<li role="presentation"><a href="account.php"><h3>Account</h3></a></li>
+		<li role="presentation" class="active"><a href="index.php"><h3>Sign In</h3></a></li>
+		<li role="presentation"><a href="logout.php"><h3>Sign Out</h3></a></li>
 	</ul>
 	
-	
-	<div class="panel panel-default" style="margin-left: 40; margin-right:40">
-		<div class="panel-heading">Popular Titles</div>
-		 
-		<table class="table">
-			<tr>
-				<th>Title</th>
-				<th>Type</th> 
-				<th>Quality</th>
-			</tr>
-			<?php 
-			   include 'database.php';
-			   $pdo = Database::connect();
-			   $sql = 'SELECT * FROM item ORDER BY item_rental_count DESC LIMIT 5';
-			   foreach ($pdo->query($sql) as $row) {
-						echo '<tr>';
-						echo '<td>'. $row['item_title'] . '</td>';
-						echo '<td>'. $row['item_type'] . '</td>';
-						echo '<td>'. $row['item_quality'] . '</td>';
-						echo '</td>';
-						echo '</tr>';
-				}
-			?>
-		</table>
-	</div>
-	<div class="panel panel-default" style="margin-left: 40; margin-right:40">
-		<div class="panel-heading">Recent Checkouts</div>
-		<table class="table">
-			<tr>
-				<th>Name</th>
-				<th>Email</th>
-			</tr>
-		<?php 
-					$sql = 'SELECT checkouts.checkout_id, customers.cust_name, customers.cust_email FROM checkouts JOIN customers ON checkouts.cust_id=customers.cust_id ORDER BY checkouts.checkout_id DESC LIMIT 5';
-					foreach ($pdo->query($sql) as $row) {
-						echo '<tr>';
-						echo '<td>'. $row['cust_name'] . '</td>';
-						echo '<td>'. $row['cust_email'] . '</td>';
-						echo '</td>';
-						echo '</tr>';
-					}
-		   Database::disconnect();
-		?>
-		</table>
-	</div>
+	<form method="post" action="index.php">
+		<div class="panel panel-default" style="margin-left: 40; margin-right:1000">
+			<div class="input-group input-group-lg">
+			   <span class="input-group-addon" id="sizing-addon1"></span>
+			   <input type="text" placeholder="Username" name="username" class="form-control" aria-describedby="sizing-addon1"></td>
+			</div>
+			<div class="input-group input-group-lg">
+			   <span class="input-group-addon" id="sizing-addon1"></span>
+			   <input type="password" placeholder="Password" name="password" class="form-control"  aria-describedby="sizing-addon1"></td>
+			</div>
+		</div>
+		
+		<div style="margin-left: 40; margin-right:40">
+			<button type="submit" class="btn btn-success" name="login_btn" class="Log In">Sign In</button>
+		</div>
+		
+		<div style="margin-left: 40; margin-right:40">
+			<button type="submit" class="btn btn-danger" name="register_btn" class="Register">Register</button>
+		</div>
+	</form>
 
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-	</form>
   </body>
 </html>

@@ -33,9 +33,11 @@
 	</div>
 	
 	<ul class="nav nav-tabs" style="margin-bottom: 25">
-		<li role="presentation"><a href="index.php"><h3>Home</h3></a></li>
-		<li role="presentation" class="active"><a href="titles.html"><h3>DVD/Bluray</h3></a></li>
+		<li role="presentation"><a href="home.php"><h3>Home</h3></a></li>
+		<li role="presentation" class="active"><a href="titles.php"><h3>DVD/Bluray</h3></a></li>
 		<li role="presentation"><a href="account.php"><h3>Account</h3></a></li>
+		<li role="presentation"><a href="index.php"><h3>Sign In</h3></a></li>
+		<li role="presentation"><a href="logout.php"><h3>Sign Out</h3></a></li>
 	</ul>
 	
 	<div>
@@ -53,9 +55,10 @@
 					
 					echo '<div class="col-sm-6 col-md-4">';
 					echo '<div class="thumbnail">';
-					echo '<img src="'. $row['item_image'] .'">';
+					echo '<img class="thumb" src="'. $row['item_image'] .'">';
 					echo '<div class="caption">';
 					echo '<h3>'. $row['item_title'] .'</h3>';
+					echo '<p>'. $row['item_type'] .' '. $row['item_quality'] .'</p>';
 					
 					if (mysqli_num_rows($result)==0)
 					{
@@ -80,7 +83,8 @@
 	</form>
 	</div>
 	</div>
-	
+
+	<link href="css/titles.css" rel="stylesheet">	
 	<link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
