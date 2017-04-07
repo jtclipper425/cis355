@@ -11,7 +11,7 @@ if(isset($_POST['register_btn']))
     $password2=mysqli_real_escape_string($db, $_POST['password2']);  
      if($password==$password2)
      {
-            //$password=md5($password); //hash password before storing for security purposes
+            $password=md5($password); //hash password before storing for security purposes
             $sql="INSERT INTO customers(cust_name, cust_email, cust_username, cust_password) VALUES('$fullname','$email', '$username','$password')";
             mysqli_query($db,$sql); 
 			

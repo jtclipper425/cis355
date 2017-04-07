@@ -6,7 +6,7 @@ if(isset($_POST['login_btn']))
 {
     $username=mysqli_real_escape_string($db, $_POST['username']);
     $password=mysqli_real_escape_string($db, $_POST['password']);
-    //$password=md5($password); //Remember we hashed password before storing last time
+    $password=md5($password); //Remember we hashed password before storing last time
     $sql="SELECT * FROM customers WHERE cust_username='$username' AND cust_password='$password'";
 		
     $result=mysqli_query($db,$sql);
@@ -15,7 +15,7 @@ if(isset($_POST['login_btn']))
 		$response = $result->fetch_assoc();
         $_SESSION['message']="You are now Logged In";
 		$_SESSION['userid']=$response['cust_id'];
-        header("location:home.php");
+        header("location:account.php");
 		exit();
     }
    else

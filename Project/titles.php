@@ -12,6 +12,9 @@
 		
 		$sql="INSERT INTO checkouts(cust_id, item_id, checked_out_date, due_date) VALUES('$userid','$id','$date1','$date2')";
         mysqli_query($db,$sql); 
+		
+		$sql="UPDATE item SET item_rental_count = item_rental_count + 1 WHERE item_id='$id'";
+        mysqli_query($db,$sql); 
 	}
 	else if(isset($_POST["return_btn"]))
 	{
